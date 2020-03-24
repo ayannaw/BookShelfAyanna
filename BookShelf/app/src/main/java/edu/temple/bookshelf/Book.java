@@ -8,6 +8,9 @@ public class Book {
 
     private HashMap<String, String> bookCollection;
 
+    public Book () {
+
+    }
     public Book(String author, String title) {
         this.author = author;
         this.title = title;
