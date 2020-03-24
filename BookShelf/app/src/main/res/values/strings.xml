@@ -1,14 +1,13 @@
 <resources>
     <string name="app_name">BookShelf</string>
-
     <string-array name="authors">
         <item>Cat in the Hat</item>
         <item>Junie B Jones and the Stupid Smelly Bus</item>
         <item>Where the Wild Things Are</item>
-        <item>The Very Hungry Catepillar</item>
+        <item>The Very Hungry Caterpillar</item>
         <item>Charlie and the Chocolate Factory</item>
-        <item>Alice's in Wonderland</item>
-        <item>Charlotte's Web</item>
+        <item>Alices in Wonderland</item>
+        <item>Charlottes Web</item>
         <item>Little Women</item>
         <item>Chicka Chicka Boom Boom</item>
         <item>The Little Engine that Could</item>
@@ -26,4 +25,5 @@
         <item>Bill Martin Jr.</item>
         <item>Watty Piper</item>
     </string-array>
+
 </resources>
