@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<HashMap<String,String>> collection = new ArrayList<HashMap<String, String>>();
     FragmentManager manager;
     BookListFragment bookListFragment = new BookListFragment();
+    static final String AUTHORS = "Authors";
+    static final String TITLES  = "Titles";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,14 +25,15 @@ public class MainActivity extends AppCompatActivity {
         String[] titles = MainActivity.this.getResources().getStringArray(R.array.titles);
         if (authors.length == titles.length) {
             for(int x = 0; x < authors.length; x++) {
-                book.put(authors[x],titles[x]);
+                book = new HashMap<>();
+                book.put(AUTHORS, authors[x]);
+                book.put(TITLES, titles[x]);
+                collection.add(book);
             }
 
-            collection.add(book);
+
             bookListFragment = BookListFragment.newInstance(collection);
         }
-
-
 
         manager = getSupportFragmentManager();
         manager.beginTransaction().add(R.id.container1,bookListFragment).commit();

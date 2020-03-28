@@ -32,6 +32,8 @@ public class BookListFragment extends Fragment {
     private TextView titles;
     private TextView authors;
     private static final String BOOK_KEY = "Books";
+    static final String AUTHORS = "Authors";
+    static final String TITLES  = "Titles";
 
     public BookListFragment() {
         // Required empty public constructor
@@ -62,12 +64,9 @@ public class BookListFragment extends Fragment {
         bookList = layout.findViewById(R.id.bookList);
        // ArrayAdapter<ArrayList<HashMap<String,String>>> adapter = new ArrayAdapter<ArrayList<HashMap<String,String>>>(layout.getContext(), android.R.layout.simple_list_item_1, Collections.singletonList(books));
         //final BookListAdapter adapter = new BookListAdapter(layout.getContext(), books);
-        //SimpleAdapter adapter = new SimpleAdapter(layout.getContext(), books, )
-        //bookList.addView(titles);
-        //bookList.addView(authors);
-        //bookList.item
+        SimpleAdapter adapter = new SimpleAdapter(layout.getContext(), books, android.R.layout.simple_list_item_2, new String[]{AUTHORS, TITLES}, new int[] {android.R.id.text1, android.R.id.text2});
+        bookList.setAdapter(adapter);
 
-        
         return layout;
     }
 }
