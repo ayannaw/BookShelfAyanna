@@ -1,6 +1,7 @@
 package edu.temple.bookshelf;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 
@@ -12,6 +13,8 @@ public class MainActivity extends AppCompatActivity {
    // Book bookShelf = new Book();
     HashMap<String, String> book = new HashMap<>();
     ArrayList<HashMap<String,String>> collection = new ArrayList<HashMap<String, String>>();
+    FragmentManager manager;
+    BookListFragment bookListFragment = new BookListFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,11 +24,16 @@ public class MainActivity extends AppCompatActivity {
         if (authors.length == titles.length) {
             for(int x = 0; x < authors.length; x++) {
                 book.put(authors[x],titles[x]);
-                collection.add(book);
             }
+
+            collection.add(book);
+            bookListFragment = BookListFragment.newInstance(collection);
         }
 
 
+
+        manager = getSupportFragmentManager();
+        manager.beginTransaction().add(R.id.container1,bookListFragment).commit();
         
 
     }
