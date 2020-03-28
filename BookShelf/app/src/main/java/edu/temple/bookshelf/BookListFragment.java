@@ -1,7 +1,9 @@
 package edu.temple.bookshelf;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -31,6 +33,7 @@ public class BookListFragment extends Fragment {
     private ArrayList<HashMap<String,String>> books;
     private TextView titles;
     private TextView authors;
+    private BookSelectedInterface parentActivity;
     private static final String BOOK_KEY = "Books";
     static final String AUTHORS = "Authors";
     static final String TITLES  = "Titles";
@@ -47,6 +50,18 @@ public class BookListFragment extends Fragment {
         bundle.putSerializable(BOOK_KEY, books);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if(context instanceof BookSelectedInterface) {
+            parentActivity = (BookSelectedInterface) context;
+        }
+        else {
+            throw new RuntimeException("Please implement the BookSelectedInterface interface for program to work!");
+        }
     }
 
     @Override
@@ -67,9 +82,21 @@ public class BookListFragment extends Fragment {
        // ArrayAdapter<ArrayList<HashMap<String,String>>> adapter = new ArrayAdapter<ArrayList<HashMap<String,String>>>(layout.getContext(), android.R.layout.simple_list_item_1, Collections.singletonList(books));
        // final BookListAdapter adapter = new BookListAdapter(layout.getContext(), books);
       //  final BookAuthorAdapter adapter = new BookAuthorAdapter(layout.getContext(), books);
-        SimpleAdapter adapter = new SimpleAdapter(layout.getContext(), books, android.R.layout.simple_list_item_2, new String[]{AUTHORS, TITLES}, new int[] {android.R.id.text1, android.R.id.text2});
+        final SimpleAdapter adapter = new SimpleAdapter(layout.getContext(), books, android.R.layout.simple_list_item_2, new String[]{AUTHORS, TITLES}, new int[] {android.R.id.text1, android.R.id.text2});
         bookList.setAdapter(adapter);
 
+        bookList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int bookIndex = position;
+                parentActivity.BookSelected(bookIndex);
+            }
+        });
+
         return layout;
+    }
+
+    interface BookSelectedInterface {
+        public void BookSelected(int index);
     }
 }

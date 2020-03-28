@@ -8,7 +8,8 @@ import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BookListFragment.BookSelectedInterface
+{
 
    // Book bookShelf = new Book();
     HashMap<String, String> book = new HashMap<>();
@@ -37,7 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
         manager = getSupportFragmentManager();
         manager.beginTransaction().add(R.id.container1,bookListFragment).commit();
-        
+    }
 
+    @Override
+    public void BookSelected(int index) {
+        System.out.println(index);
     }
 }
