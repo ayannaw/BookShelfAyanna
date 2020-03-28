@@ -17,16 +17,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String[] authors = MainActivity.this.getResources().getStringArray(R.array.authors);
-        String[] titles = MainActivity.this.getResources().getStringArray(R.array.title);
+        String[] titles = MainActivity.this.getResources().getStringArray(R.array.titles);
         if (authors.length == titles.length) {
             for(int x = 0; x < authors.length; x++) {
                 book.put(authors[x],titles[x]);
                 collection.add(book);
             }
-
-           // collection = bookShelf.GetCollection();
-
         }
+
+
         
 
     }
