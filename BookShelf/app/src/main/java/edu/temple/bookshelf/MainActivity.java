@@ -18,12 +18,14 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     BookListFragment bookListFragment = new BookListFragment();
     static final String AUTHORS = "Authors";
     static final String TITLES  = "Titles";
+    private boolean isTwoContainers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String[] authors = MainActivity.this.getResources().getStringArray(R.array.authors);
         String[] titles = MainActivity.this.getResources().getStringArray(R.array.titles);
+        isTwoContainers = findViewById(R.id.container2) != null;
         if (authors.length == titles.length) {
             for(int x = 0; x < authors.length; x++) {
                 book = new HashMap<>();
@@ -43,5 +45,12 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     @Override
     public void BookSelected(int index) {
         System.out.println(index);
+        HashMap<String,String> aBook = collection.get(index);
+        if(!isTwoContainers) {
+            manager.beginTransaction().replace(R.id.container1, BookDetailsFragment.newInstance(aBook)).addToBackStack(null).commit();
+        }
+        else {
+
+        }
     }
 }

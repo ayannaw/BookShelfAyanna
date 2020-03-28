@@ -82,7 +82,7 @@ public class BookListFragment extends Fragment {
        // ArrayAdapter<ArrayList<HashMap<String,String>>> adapter = new ArrayAdapter<ArrayList<HashMap<String,String>>>(layout.getContext(), android.R.layout.simple_list_item_1, Collections.singletonList(books));
        // final BookListAdapter adapter = new BookListAdapter(layout.getContext(), books);
       //  final BookAuthorAdapter adapter = new BookAuthorAdapter(layout.getContext(), books);
-        final SimpleAdapter adapter = new SimpleAdapter(layout.getContext(), books, android.R.layout.simple_list_item_2, new String[]{AUTHORS, TITLES}, new int[] {android.R.id.text1, android.R.id.text2});
+        final SimpleAdapter adapter = new SimpleAdapter(layout.getContext(), books, android.R.layout.simple_list_item_2, new String[]{TITLES, AUTHORS}, new int[] {android.R.id.text1, android.R.id.text2});
         bookList.setAdapter(adapter);
 
         bookList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
