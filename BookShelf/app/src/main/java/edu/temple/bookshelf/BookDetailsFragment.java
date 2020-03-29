@@ -51,12 +51,19 @@ public class BookDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         layout = inflater.inflate(R.layout.fragment_book_details, container, false);
 
-        author = (TextView) layout.findViewById(R.id.author);
-        title = (TextView) layout.findViewById(R.id.title);
+     //   DisplayBook(Book);
 
-        author.setText(Book.get(AUTHOR_KEY).toString());
-        title.setText(Book.get(TITLE_KEY).toString());
+        author = layout.findViewById(R.id.author);
+        title = layout.findViewById(R.id.title);
 
         return layout;
+    }
+
+
+    public void DisplayBook(HashMap<String, String> book) {
+        if (layout != null) {
+            author.setText(book.get(AUTHOR_KEY).toString());
+            title.setText(book.get(TITLE_KEY).toString());
+        }
     }
 }

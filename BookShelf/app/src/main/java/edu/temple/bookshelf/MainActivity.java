@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     ArrayList<HashMap<String,String>> collection = new ArrayList<HashMap<String, String>>();
     FragmentManager manager;
     BookListFragment bookListFragment = new BookListFragment();
+    BookDetailsFragment detailsFragment = new BookDetailsFragment();
     static final String AUTHORS = "Authors";
     static final String TITLES  = "Titles";
     private boolean isTwoContainers;
@@ -40,6 +41,11 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
         manager = getSupportFragmentManager();
         manager.beginTransaction().add(R.id.container1,bookListFragment).commit();
+
+        if(isTwoContainers) {
+            detailsFragment = new BookDetailsFragment();
+            manager.beginTransaction().add(R.id.container2, detailsFragment).commit();
+        }
     }
 
     @Override
@@ -50,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             manager.beginTransaction().replace(R.id.container1, BookDetailsFragment.newInstance(aBook)).addToBackStack(null).commit();
         }
         else {
-
+            detailsFragment.DisplayBook(aBook);
         }
     }
 }
