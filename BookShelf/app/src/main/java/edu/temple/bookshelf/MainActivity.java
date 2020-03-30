@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     JsonObjectRequest objectRequest;
     JsonArrayRequest arrayRequest;
 
+    final private static String BASE_URL = "https://kamorris.com/lab/abp/booksearch.php?search=";
     final private static String BOOK_ID = "book_id";
     final private static String AUTHOR = "author";
     final private static String TITLE = "title";
@@ -58,11 +59,22 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         queue = Volley.newRequestQueue(this);
         isTwoContainers = findViewById(R.id.container2) != null;
 
-        url = "https://kamorris.com/lab/abp/booksearch.php?search=a";
+        url = BASE_URL;
         RequestAndResponse(url);
         Log.i("Collection Size", "size: " + collection.size());
 
-        
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchString = searchEditText.getText().toString();
+                url = BASE_URL + searchString;
+
+                RequestAndResponse(url);
+
+                bookListFragment = BookListFragment.newInstance(collection);
+                manager.beginTransaction().add(R.id.container1, bookListFragment).commit();
+            }
+        });
     }
 
     private void RequestAndResponse(String url) {
@@ -108,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
     private void GetBookObjects(JSONArray array) {
         if (array != null) {
-            Log.i("Array", array.toString());
+          //  Log.i("Array", array.toString());
             try {
                 for (int x = 0; x < array.length(); x++) {
                     JSONObject object = array.getJSONObject(x);
@@ -119,18 +131,13 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                     String coverURL = object.getString(COVER_URL);
 
                     collection.add(new Book(bookId, author, title, coverURL));
-                    Log.i("Collection Size after adding books", String.valueOf(collection.size()));
+                 //   Log.i("Collection Size after adding books", String.valueOf(collection.size()));
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        else {
-            Log.i("Array Empty", array.toString());
-        }
-
-
     }
 
     @Override
