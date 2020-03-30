@@ -21,11 +21,23 @@
         <item>Ronald Dahl</item>
         <item>Lewis Carrol</item>
         <item>E. B. White</item>
-        <item>Louisa May</item>
+        <item>Louisa May Alcot</item>
         <item>Bill Martin Jr.</item>
         <item>Watty Piper</item>
     </string-array>
 
+    <string-array name="coverURLs">
+        <item>https://images-na.ssl-images-amazon.com/images/I/51L3jDkuo%2BL._SX364_BO1,204,203,200_.jpg</item>
+        <item>https://images-na.ssl-images-amazon.com/images/I/511NWOW0UVL._SX338_BO1,204,203,200_.jpg</item>
+        <item>https://m.media-amazon.com/images/I/81xCNcQ1biL._SS500_.jpg</item>
+        <item>https://images-na.ssl-images-amazon.com/images/I/41tyokViuNL._SY355_BO1,204,203,200_.jpg</item>
+        <item>https://images-na.ssl-images-amazon.com/images/I/41ixrNjqPZL._SX355_BO1,204,203,200_.jpg</item>
+        <item>https://images-na.ssl-images-amazon.com/images/I/51TgOw1u6WL._SX349_BO1,204,203,200_.jpg</item>
+        <item>https://images-na.ssl-images-amazon.com/images/I/61%2B3z1o4oUL._SX334_BO1,204,203,200_.jpg</item>
+        <item>https://images-na.ssl-images-amazon.com/images/I/51Qpeie8fAL.jpg</item>
+        <item>https://images-na.ssl-images-amazon.com/images/I/51wfzW0QnXL._SX381_BO1,204,203,200_.jpg</item>
+        <item>https://prodimage.images-bn.com/pimages/9780448405209_p0_v2_s550x406.jpg</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
