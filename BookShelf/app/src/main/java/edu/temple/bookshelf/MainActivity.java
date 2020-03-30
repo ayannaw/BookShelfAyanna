@@ -59,12 +59,14 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         isTwoContainers = findViewById(R.id.container2) != null;
 
         url = "https://kamorris.com/lab/abp/booksearch.php?search=a";
-        collection = RequestAndResponse(url);
+        RequestAndResponse(url);
         Log.i("Collection Size", "size: " + collection.size());
+
+        
     }
 
-    private ArrayList<Book> RequestAndResponse(String url) {
-        final ArrayList<Book> list = new ArrayList<>();
+    private void RequestAndResponse(String url) {
+        //final ArrayList<Book> list = new ArrayList<>();
         arrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 url,
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                     public void onResponse(JSONArray response) {
                         try {
                             Log.i("Response", response.toString());
-                            for(int x = 0; x < response.length(); x++) {
+                            /*for(int x = 0; x < response.length(); x++) {
                                 JSONObject object = response.getJSONObject(x);
 
                                 String id = object.getString(BOOK_ID);
@@ -85,8 +87,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                                 String coverURL = object.getString(COVER_URL);
 
                                 book = new Book(bookId, author, title, coverURL);
-                                list.add(book);
-                            }
+                                collection.add(book);*/
+                                GetBookObjects(response);
+
                         }
                         catch (Exception e) {
                             e.printStackTrace();
@@ -101,7 +104,33 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 });
         queue.add(arrayRequest);
         Log.i("RequestAndResponse", arrayRequest.toString());
-        return list;
+    }
+
+    private void GetBookObjects(JSONArray array) {
+        if (array != null) {
+            Log.i("Array", array.toString());
+            try {
+                for (int x = 0; x < array.length(); x++) {
+                    JSONObject object = array.getJSONObject(x);
+                    String id = object.getString(BOOK_ID);
+                    int bookId = Integer.parseInt(id);
+                    String author = object.getString(AUTHOR);
+                    String title = object.getString(TITLE);
+                    String coverURL = object.getString(COVER_URL);
+
+                    collection.add(new Book(bookId, author, title, coverURL));
+                    Log.i("Collection Size after adding books", String.valueOf(collection.size()));
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            Log.i("Array Empty", array.toString());
+        }
+
+
     }
 
     @Override
