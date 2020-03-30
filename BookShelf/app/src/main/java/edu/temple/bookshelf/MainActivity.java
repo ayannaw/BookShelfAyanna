@@ -4,6 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,46 +28,81 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 {
 
    // Book bookShelf = new Book();
-    HashMap<String, String> book = new HashMap<>();
-    ArrayList<HashMap<String,String>> collection = new ArrayList<HashMap<String, String>>();
+    Book book;
+    ArrayList<Book> collection = new ArrayList<Book>();
     FragmentManager manager;
-    BookListFragment bookListFragment = new BookListFragment();
-    BookDetailsFragment detailsFragment = new BookDetailsFragment();
-    static final String AUTHORS = "Authors";
-    static final String TITLES  = "Titles";
+    BookListFragment bookListFragment;
+    BookDetailsFragment detailsFragment;
+    Button searchButton;
+    EditText searchEditText;
+    String searchString, url;
     private boolean isTwoContainers;
+    RequestQueue queue;
+    JsonArrayRequest jsonArrayRequest;
+
+    final private static String BOOK_ID = "book_id";
+    final private static String AUTHOR = "author";
+    final private static String TITLE = "title";
+    final private static String COVER_URL = "cover_url";
+    final
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String[] authors = MainActivity.this.getResources().getStringArray(R.array.authors);
-        String[] titles = MainActivity.this.getResources().getStringArray(R.array.titles);
+
+        searchEditText = findViewById(R.id.searchEditText);
+        searchButton = (Button) findViewById(R.id.searchButton);
+
+        queue = Volley.newRequestQueue(this);
         isTwoContainers = findViewById(R.id.container2) != null;
-        if (authors.length == titles.length) {
-            for(int x = 0; x < authors.length; x++) {
-                book = new HashMap<>();
-                book.put(AUTHORS, authors[x]);
-                book.put(TITLES, titles[x]);
-                collection.add(book);
-            }
 
+        url = "https://kamorris.com/lab/abp/booksearch.php?search=a";
+        collection = RequestAndResponse(url);
+        Log.i("Collection Size", "size: " + collection.size());
+    }
 
-            bookListFragment = BookListFragment.newInstance(collection);
-        }
+    private ArrayList<Book> RequestAndResponse(String url) {
+        final ArrayList<Book> list = new ArrayList<>();
+        jsonArrayRequest = new JsonArrayRequest(
+                url,
+                new Response.Listener<JSONArray>() {
 
-        manager = getSupportFragmentManager();
-        manager.beginTransaction().add(R.id.container1,bookListFragment).commit();
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            Log.i("Response", response.toString());
+                            for(int x = 0; x < response.length(); x++) {
+                                JSONObject object = response.getJSONObject(x);
 
-        if(isTwoContainers) {
-            detailsFragment = new BookDetailsFragment();
-            manager.beginTransaction().add(R.id.container2, detailsFragment).commit();
-        }
+                                String id = object.getString(BOOK_ID);
+                                int bookId = Integer.parseInt(id);
+                                String author = object.getString(AUTHOR);
+                                String title = object.getString(TITLE);
+                                String coverURL = object.getString(COVER_URL);
+
+                                book = new Book(bookId, author, title, coverURL);
+                                list.add(book);
+                            }
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i("Error", error.toString());
+                    }
+                });
+        queue.add(jsonArrayRequest);
+        return list;
     }
 
     @Override
     public void BookSelected(int index) {
         System.out.println(index);
-        HashMap<String,String> aBook = collection.get(index);
+        Book aBook = collection.get(index);
         if(!isTwoContainers) {
             manager.beginTransaction()
                     .replace(R.id.container1, BookDetailsFragment.newInstance(aBook))

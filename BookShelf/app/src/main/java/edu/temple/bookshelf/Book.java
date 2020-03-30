@@ -10,7 +10,7 @@ public class Book {
 
     }
 
-    public Book(int id, String title, String author, String coverURL) {
+    public Book(int id, String author, String title, String coverURL) {
         this.author = author;
         this.title = title;
         this.id = id;
@@ -29,4 +29,7 @@ public class Book {
         return author;
     }
 
+    public String toString() {
+        return "ID: " + id + ", Author: " + author + ", Title: " + title + ", Cover_URL: " + coverURL;
+    }
 }

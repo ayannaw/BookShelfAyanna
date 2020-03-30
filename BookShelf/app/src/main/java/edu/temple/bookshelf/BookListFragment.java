@@ -30,7 +30,7 @@ public class BookListFragment extends Fragment {
 
    // private View layout;
   //  private ListView bookList;
-    private ArrayList<HashMap<String,String>> books;
+    private ArrayList<Book> books;
    // private TextView titles;
    // private TextView authors;
     private BookSelectedInterface parentActivity;
@@ -44,7 +44,7 @@ public class BookListFragment extends Fragment {
 
 
 
-    public static BookListFragment newInstance(ArrayList<HashMap<String,String>> books) {
+    public static BookListFragment newInstance(ArrayList<Book> books) {
         BookListFragment fragment = new BookListFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(BOOK_LIST_KEY, books);
@@ -69,7 +69,7 @@ public class BookListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if(bundle != null) {
-            books = (ArrayList<HashMap<String, String>>) bundle.getSerializable(BOOK_LIST_KEY);
+            books = (ArrayList<Book>) bundle.getSerializable(BOOK_LIST_KEY);
         }
     }
 

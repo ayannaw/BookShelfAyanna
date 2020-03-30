@@ -19,13 +19,13 @@ public class BookListAdapter extends BaseAdapter {
    // @Override
     //private Activity parentActivity;
     private Context context;
-    private ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-    private static final int AUTHOR_INDEX = 0;
+    private ArrayList<Book> list = new ArrayList<Book>();
+   /* private static final int AUTHOR_INDEX = 0;
     private static final int TITLE_INDEX = 1;
     private static final String AUTHOR_KEY = "Authors";
-    private static final String TITLE_KEY  = "Titles";
+    private static final String TITLE_KEY  = "Titles";*/
 
-    public BookListAdapter(Context c, ArrayList<HashMap<String,String>> list) {
+    public BookListAdapter(Context c, ArrayList<Book> list) {
         context = c;
         this.list = list;
     }
@@ -54,8 +54,8 @@ public class BookListAdapter extends BaseAdapter {
         title = convertView.findViewById(R.id.title);
         author = convertView.findViewById(R.id.author);
 
-        title.setText(((HashMap<String,String>) getItem(position)).get(TITLE_KEY));
-        author.setText(((HashMap<String,String>) getItem(position)).get(AUTHOR_KEY));
+        title.setText(((Book) getItem(position)).getTitle());
+        author.setText(((Book) getItem(position)).getAuthor());
 
         return convertView;
 

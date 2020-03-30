@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 
@@ -20,7 +21,7 @@ public class BookDetailsFragment extends Fragment {
     private View layout;
     private TextView title;
     private TextView author;
-    private HashMap<String, String> Book;
+    private Book book;
     final private static String AUTHOR_KEY = "Authors";
     final private static String TITLE_KEY = "Titles";
     final private static String BOOK = "Book";
@@ -28,10 +29,10 @@ public class BookDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static BookDetailsFragment newInstance(HashMap<String, String>book) {
+    public static BookDetailsFragment newInstance(Book book) {
         BookDetailsFragment fragment = new BookDetailsFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(BOOK, book);
+        bundle.putSerializable(BOOK, (Serializable) book);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -41,7 +42,7 @@ public class BookDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if(bundle != null) {
-            Book = (HashMap<String, String>) bundle.getSerializable(BOOK);
+            book = (Book) bundle.getSerializable(BOOK);
         }
     }
 
@@ -56,17 +57,17 @@ public class BookDetailsFragment extends Fragment {
         author = layout.findViewById(R.id.author);
         title = layout.findViewById(R.id.title);
 
-        if(Book != null) {
-            DisplayBook(Book);
+        if(book != null) {
+            DisplayBook(book);
         }
         return layout;
     }
 
 
-    public void DisplayBook(HashMap<String, String> book) {
+    public void DisplayBook(Book book) {
         if (layout != null) {
-            author.setText(book.get(AUTHOR_KEY).toString());
-            title.setText(book.get(TITLE_KEY).toString());
+            author.setText(book.getAuthor());
+            title.setText(book.getTitle());
         }
     }
 }
