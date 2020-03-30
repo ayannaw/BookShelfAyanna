@@ -30,12 +30,12 @@ public class BookListAdapter extends BaseAdapter {
         this.list = list;
     }
     public int getCount() {
-        return list.get(AUTHOR_INDEX).size();
+        return list.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return list.get(position).toString();
+        return list.get(position);
     }
 
     @Override
@@ -45,13 +45,21 @@ public class BookListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
+        TextView title, author;
         LayoutInflater inflater = LayoutInflater.from(context);
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.fragment_book_list, parent, false);
+        if (!(convertView instanceof LinearLayout)) {
+            convertView = inflater.inflate(R.layout.book_adapter_layout, parent, false);
         }
 
-        TextView author = new TextView(context);
+        title = convertView.findViewById(R.id.title);
+        author = convertView.findViewById(R.id.author);
+
+        title.setText(((HashMap<String,String>) getItem(position)).get(TITLE_KEY));
+        author.setText(((HashMap<String,String>) getItem(position)).get(AUTHOR_KEY));
+
+        return convertView;
+
+        /*TextView author = new TextView(context);
         TextView title = new TextView(context);
 
         author.setTextSize(24);
@@ -68,27 +76,18 @@ public class BookListAdapter extends BaseAdapter {
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
        // layoutParams.addRule(RelativeLayout.ABOVE, author.getId());
 
-      /*  for (int x = 0; x <authors.length; x++) {
+      *//*  for (int x = 0; x <authors.length; x++) {
             author = new TextView(context);
             title = new TextView(context);
             author.setText(authors[x]);
             title.setText(titles[x]);
 
-        }*/
+        }*//*
 
         layout.addView(author);
         layout.addView(title);
-        return layout;
+        return layout;*/
 
-    }
-
-    private String[] GetKeySetArray(int index) {
-        Object[] objects = list.get(index).values().toArray();
-        String[] values = new String[objects.length];
-        for (int x = 0; x < values.length; x++) {
-            values[x] = objects[x].toString();
-        }
-        return values;
     }
 
 }

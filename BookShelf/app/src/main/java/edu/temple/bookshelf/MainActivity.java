@@ -53,7 +53,10 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         System.out.println(index);
         HashMap<String,String> aBook = collection.get(index);
         if(!isTwoContainers) {
-            manager.beginTransaction().replace(R.id.container1, BookDetailsFragment.newInstance(aBook)).addToBackStack(null).commit();
+            manager.beginTransaction()
+                    .replace(R.id.container1, BookDetailsFragment.newInstance(aBook))
+                    .addToBackStack(null)
+                    .commit();
         }
         else {
             detailsFragment.DisplayBook(aBook);
