@@ -15,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -38,7 +39,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     String searchString, url;
     private boolean isTwoContainers;
     RequestQueue queue;
-    JsonArrayRequest jsonArrayRequest;
+    JsonObjectRequest objectRequest;
+    JsonArrayRequest arrayRequest;
 
     final private static String BOOK_ID = "book_id";
     final private static String AUTHOR = "author";
@@ -63,8 +65,10 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
     private ArrayList<Book> RequestAndResponse(String url) {
         final ArrayList<Book> list = new ArrayList<>();
-        jsonArrayRequest = new JsonArrayRequest(
+        arrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
                 url,
+                null,
                 new Response.Listener<JSONArray>() {
 
                     @Override
@@ -95,7 +99,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                         Log.i("Error", error.toString());
                     }
                 });
-        queue.add(jsonArrayRequest);
+        queue.add(arrayRequest);
+        Log.i("RequestAndResponse", arrayRequest.toString());
         return list;
     }
 
