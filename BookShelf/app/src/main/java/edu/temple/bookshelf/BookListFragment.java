@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -30,7 +31,8 @@ public class BookListFragment extends Fragment {
 
    // private View layout;
   //  private ListView bookList;
-    private ArrayList<Book> books;
+   ListView listView;
+    private ArrayList<Book> books = new ArrayList<Book>();
    // private TextView titles;
    // private TextView authors;
     private BookSelectedInterface parentActivity;
@@ -70,6 +72,8 @@ public class BookListFragment extends Fragment {
         Bundle bundle = getArguments();
         if(bundle != null) {
             books = (ArrayList<Book>) bundle.getSerializable(BOOK_LIST_KEY);
+        } else {
+            books = new ArrayList<Book>();
         }
     }
 
@@ -77,10 +81,9 @@ public class BookListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        ListView listView = (ListView) inflater.inflate(R.layout.fragment_book_list, container, false);
+        listView = (ListView) inflater.inflate(R.layout.fragment_book_list, container, false);
 
         listView.setAdapter(new BookListAdapter(getContext(), books));
-
        // ArrayAdapter<ArrayList<HashMap<String,String>>> adapter = new ArrayAdapter<ArrayList<HashMap<String,String>>>(layout.getContext(), android.R.layout.simple_list_item_1, Collections.singletonList(books));
        // final BookListAdapter adapter = new BookListAdapter(layout.getContext(), books);
       //  final BookAuthorAdapter adapter = new BookAuthorAdapter(layout.getContext(), books);
@@ -100,5 +103,12 @@ public class BookListFragment extends Fragment {
 
     interface BookSelectedInterface {
         public void BookSelected(int index);
+    }
+
+    public void UpdateBooks(ArrayList<Book> list) {
+        books.clear();
+        books.addAll(list);
+        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+
     }
 }

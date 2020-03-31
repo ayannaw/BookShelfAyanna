@@ -60,8 +60,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         isTwoContainers = findViewById(R.id.container2) != null;
 
         url = BASE_URL;
-        RequestAndResponse(url);
+        //RequestAndResponse(url);
         Log.i("Collection Size", "size: " + collection.size());
+        manager.beginTransaction().add(R.id.container1, bookListFragment).commit();
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
                 RequestAndResponse(url);
 
-                bookListFragment = BookListFragment.newInstance(collection);
-                manager.beginTransaction().add(R.id.container1, bookListFragment).commit();
+                //add public method to get a new set of books then update itself
+
             }
         });
     }
@@ -133,6 +134,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                     collection.add(new Book(bookId, author, title, coverURL));
                  //   Log.i("Collection Size after adding books", String.valueOf(collection.size()));
                 }
+                //tell booklistfragment show books
+                  
 
             } catch (JSONException e) {
                 e.printStackTrace();
