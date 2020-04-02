@@ -163,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                     .replace(R.id.container1, BookDetailsFragment.newInstance(aBook))
                     .addToBackStack(null)
                     .commit();
+
         }
         else {
             detailsFragment.DisplayBook(aBook);
