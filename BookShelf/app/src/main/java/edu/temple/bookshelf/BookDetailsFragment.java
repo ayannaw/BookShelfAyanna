@@ -5,9 +5,11 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -21,6 +23,7 @@ public class BookDetailsFragment extends Fragment {
     private View layout;
     private TextView title;
     private TextView author;
+    private ImageView cover;
     private Book book;
     final private static String AUTHOR_KEY = "Authors";
     final private static String TITLE_KEY = "Titles";
@@ -32,8 +35,8 @@ public class BookDetailsFragment extends Fragment {
     public static BookDetailsFragment newInstance(Book book) {
         BookDetailsFragment fragment = new BookDetailsFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(BOOK, (Serializable) book);
         fragment.setArguments(bundle);
+        bundle.putParcelable(BOOK, book);
         return fragment;
     }
 
@@ -42,7 +45,7 @@ public class BookDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if(bundle != null) {
-            book = (Book) bundle.getSerializable(BOOK);
+            book = (Book) bundle.getParcelable(BOOK);
         }
     }
 
@@ -56,6 +59,7 @@ public class BookDetailsFragment extends Fragment {
 
         author = layout.findViewById(R.id.author);
         title = layout.findViewById(R.id.title);
+        cover = layout.findViewById(R.id.coverImageView);
 
         if(book != null) {
             DisplayBook(book);

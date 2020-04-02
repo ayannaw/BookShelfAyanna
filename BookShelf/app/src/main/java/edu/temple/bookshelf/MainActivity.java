@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -38,9 +39,10 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     EditText searchEditText;
     String searchString, url;
     private boolean isTwoContainers;
+    private boolean isDetailsFragment;
     RequestQueue queue;
-    JsonObjectRequest objectRequest;
     JsonArrayRequest arrayRequest;
+
 
     final private static String BASE_URL = "https://kamorris.com/lab/abp/booksearch.php?search=";
     final private static String BOOK_ID = "book_id";
@@ -53,29 +55,38 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        manager = getSupportFragmentManager();
+
         searchEditText = findViewById(R.id.searchEditText);
         searchButton = (Button) findViewById(R.id.searchButton);
 
         queue = Volley.newRequestQueue(this);
         isTwoContainers = findViewById(R.id.container2) != null;
-
+        isDetailsFragment = manager.findFragmentByTag(String.valueOf(R.string.detailsFragmentTag)) != null;
         url = BASE_URL;
+
+        bookListFragment = new BookListFragment();
+        //detailsFragment = new BookDetailsFragment();
         //RequestAndResponse(url);
-        Log.i("Collection Size", "size: " + collection.size());
+     //   Log.i("Collection Size", "size: " + collection.size());
         manager.beginTransaction().add(R.id.container1, bookListFragment).commit();
+
+        if(isTwoContainers) {
+            detailsFragment = new BookDetailsFragment();
+            manager.beginTransaction().add(R.id.container2, detailsFragment).commit();
+        }
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 searchString = searchEditText.getText().toString();
                 url = BASE_URL + searchString;
-
                 RequestAndResponse(url);
-
                 //add public method to get a new set of books then update itself
-
             }
         });
+
     }
 
     private void RequestAndResponse(String url) {
@@ -123,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         if (array != null) {
           //  Log.i("Array", array.toString());
             try {
+                collection.clear();
                 for (int x = 0; x < array.length(); x++) {
                     JSONObject object = array.getJSONObject(x);
                     String id = object.getString(BOOK_ID);
@@ -135,8 +147,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                  //   Log.i("Collection Size after adding books", String.valueOf(collection.size()));
                 }
                 //tell booklistfragment show books
-                  
-
+                bookListFragment.UpdateBooks(collection);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

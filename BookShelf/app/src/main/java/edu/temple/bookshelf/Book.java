@@ -1,6 +1,9 @@
 package edu.temple.bookshelf;
 
-public class Book {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Book implements Parcelable {
     private int id;
     private String title;
     private String author;
@@ -31,5 +34,15 @@ public class Book {
 
     public String toString() {
         return "ID: " + id + ", Author: " + author + ", Title: " + title + ", Cover_URL: " + coverURL;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

@@ -2,6 +2,8 @@
     <string name="app_name">BookShelf</string>
     <string name="SearchEditTextHint">Enter a book title or author</string>
     <string name="SearchButtonText">Search</string>
+    <string name="listFragmentTag">List</string>
+    <string name="detailsFragmentTag">Details</string>
     <string-array name="titles">
         <item>Cat in the Hat</item>
         <item>Junie B Jones and the Stupid Smelly Bus</item>
