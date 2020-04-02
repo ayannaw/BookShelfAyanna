@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -72,6 +74,7 @@ public class BookDetailsFragment extends Fragment {
         if (layout != null) {
             author.setText(book.getAuthor());
             title.setText(book.getTitle());
+            Picasso.get().load(book.getCoverURL()).into(cover);
         }
     }
 }
