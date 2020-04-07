@@ -73,11 +73,11 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         //detailsFragment = new BookDetailsFragment();
         //RequestAndResponse(url);
      //   Log.i("Collection Size", "size: " + collection.size());
-        if(savedInstanceState != null) {
+        /*if(savedInstanceState != null) {
             collection = (ArrayList<Book>)savedInstanceState.getSerializable(BOOK_LIST_KEY);
             //bookListFragment.UpdateBooks(collection);
             bookListFragment = bookListFragment.newInstance(collection);
-        }
+        }*/
         manager.beginTransaction().add(R.id.container1, bookListFragment).commit();
 
         if(isTwoContainers) {
@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if(collection.size() != 0) {
+            Log.i("Collection that is being saved", collection.toString());
             outState.putSerializable(BOOK_LIST_KEY, collection);
         }
     }
