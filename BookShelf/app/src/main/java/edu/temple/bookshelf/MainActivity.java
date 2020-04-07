@@ -132,9 +132,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
     private void GetBookObjects(JSONArray array) {
         if (array != null) {
-          //  Log.i("Array", array.toString());
+            Log.i("Array", array.toString());
             try {
-                collection.clear();
+               collection.clear();
                 for (int x = 0; x < array.length(); x++) {
                     JSONObject object = array.getJSONObject(x);
                     String id = object.getString(BOOK_ID);
