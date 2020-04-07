@@ -1,9 +1,11 @@
 package edu.temple.bookshelf;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.telecom.Call;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     private boolean isDetailsFragment;
     RequestQueue queue;
     JsonArrayRequest arrayRequest;
+
+    final String BOOK_LIST_KEY = "collection";
 
 
     final private static String BASE_URL = "https://kamorris.com/lab/abp/booksearch.php?search=";
@@ -87,6 +91,18 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             }
         });
 
+        if(savedInstanceState != null) {
+            collection = (ArrayList<Book>)savedInstanceState.getSerializable(BOOK_LIST_KEY);
+            bookListFragment.UpdateBooks(collection);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(collection.size() != 0) {
+            outState.putSerializable(BOOK_LIST_KEY, collection);
+        }
     }
 
     private void RequestAndResponse(String url) {
