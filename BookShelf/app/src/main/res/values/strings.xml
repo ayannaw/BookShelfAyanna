@@ -4,44 +4,8 @@
     <string name="SearchButtonText">Search</string>
     <string name="listFragmentTag">List</string>
     <string name="detailsFragmentTag">Details</string>
-    <string-array name="titles">
-        <item>Cat in the Hat</item>
-        <item>Junie B Jones and the Stupid Smelly Bus</item>
-        <item>Where the Wild Things Are</item>
-        <item>The Very Hungry Caterpillar</item>
-        <item>Charlie and the Chocolate Factory</item>
-        <item>Alices in Wonderland</item>
-        <item>Charlottes Web</item>
-        <item>Little Women</item>
-        <item>Chicka Chicka Boom Boom</item>
-        <item>The Little Engine that Could</item>
-    </string-array>
 
-    <string-array name="authors">
-        <item>Dr. Suess</item>
-        <item>Barbara Park</item>
-        <item>Maurice Sendak</item>
-        <item>Eric Carle</item>
-        <item>Ronald Dahl</item>
-        <item>Lewis Carrol</item>
-        <item>E. B. White</item>
-        <item>Louisa May Alcot</item>
-        <item>Bill Martin Jr.</item>
-        <item>Watty Piper</item>
-    </string-array>
-
-    <string-array name="coverURLs">
-        <item>https://images-na.ssl-images-amazon.com/images/I/51L3jDkuo%2BL._SX364_BO1,204,203,200_.jpg</item>
-        <item>https://images-na.ssl-images-amazon.com/images/I/511NWOW0UVL._SX338_BO1,204,203,200_.jpg</item>
-        <item>https://m.media-amazon.com/images/I/81xCNcQ1biL._SS500_.jpg</item>
-        <item>https://images-na.ssl-images-amazon.com/images/I/41tyokViuNL._SY355_BO1,204,203,200_.jpg</item>
-        <item>https://images-na.ssl-images-amazon.com/images/I/41ixrNjqPZL._SX355_BO1,204,203,200_.jpg</item>
-        <item>https://images-na.ssl-images-amazon.com/images/I/51TgOw1u6WL._SX349_BO1,204,203,200_.jpg</item>
-        <item>https://images-na.ssl-images-amazon.com/images/I/61%2B3z1o4oUL._SX334_BO1,204,203,200_.jpg</item>
-        <item>https://images-na.ssl-images-amazon.com/images/I/51Qpeie8fAL.jpg</item>
-        <item>https://images-na.ssl-images-amazon.com/images/I/51wfzW0QnXL._SX381_BO1,204,203,200_.jpg</item>
-        <item>https://prodimage.images-bn.com/pimages/9780448405209_p0_v2_s550x406.jpg</item>
-    </string-array>
+    <string name="search_error_message">No results matched your search.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

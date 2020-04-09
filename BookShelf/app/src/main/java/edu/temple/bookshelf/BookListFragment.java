@@ -29,27 +29,19 @@ import java.util.List;
  */
 public class BookListFragment extends Fragment {
 
-   // private View layout;
-  //  private ListView bookList;
    ListView listView;
     private ArrayList<Book> books = new ArrayList<Book>();
-   // private TextView titles;
-   // private TextView authors;
     private BookSelectedInterface parentActivity;
     private static final String BOOK_LIST_KEY = "Books";
-   // static final String AUTHORS = "Authors";
-  //  static final String TITLES  = "Titles";
 
     public BookListFragment() {
         // Required empty public constructor
     }
 
-
-
     public static BookListFragment newInstance(ArrayList<Book> books) {
         BookListFragment fragment = new BookListFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(BOOK_LIST_KEY, books);
+        bundle.putParcelableArrayList(BOOK_LIST_KEY, books);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -71,7 +63,7 @@ public class BookListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if(bundle != null) {
-            books = (ArrayList<Book>) bundle.getSerializable(BOOK_LIST_KEY);
+            books = bundle.getParcelableArrayList(BOOK_LIST_KEY);
         } else {
             books = new ArrayList<Book>();
         }
@@ -84,11 +76,6 @@ public class BookListFragment extends Fragment {
         listView = (ListView) inflater.inflate(R.layout.fragment_book_list, container, false);
 
         listView.setAdapter(new BookListAdapter(getContext(), books));
-       // ArrayAdapter<ArrayList<HashMap<String,String>>> adapter = new ArrayAdapter<ArrayList<HashMap<String,String>>>(layout.getContext(), android.R.layout.simple_list_item_1, Collections.singletonList(books));
-       // final BookListAdapter adapter = new BookListAdapter(layout.getContext(), books);
-      //  final BookAuthorAdapter adapter = new BookAuthorAdapter(layout.getContext(), books);
-        //final SimpleAdapter adapter = new SimpleAdapter(layout.getContext(), books, android.R.layout.simple_list_item_2, new String[]{TITLES, AUTHORS}, new int[] {android.R.id.text1, android.R.id.text2});
-        //bookList.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -101,9 +88,6 @@ public class BookListFragment extends Fragment {
         return listView;
     }
 
-    interface BookSelectedInterface {
-        public void BookSelected(int index);
-    }
 
     public void UpdateBooks(ArrayList<Book> list) {
         books.clear();
@@ -111,4 +95,9 @@ public class BookListFragment extends Fragment {
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
 
     }
+
+    interface BookSelectedInterface {
+        public void BookSelected(int index);
+    }
+
 }

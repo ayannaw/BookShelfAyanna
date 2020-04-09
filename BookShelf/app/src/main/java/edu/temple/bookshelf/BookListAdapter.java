@@ -58,36 +58,6 @@ public class BookListAdapter extends BaseAdapter {
         author.setText(((Book) getItem(position)).getAuthor());
 
         return convertView;
-
-        /*TextView author = new TextView(context);
-        TextView title = new TextView(context);
-
-        author.setTextSize(24);
-        title.setTextSize(24);
-
-        //authors.setText(list.get(position).keySet().toString());
-        String[] authors = GetKeySetArray(AUTHOR_INDEX);
-        String[] titles = GetKeySetArray(TITLE_INDEX);
-
-        author.setText(authors[0]);
-        title.setText(titles[0]);
-
-        RelativeLayout layout = new RelativeLayout(context);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-       // layoutParams.addRule(RelativeLayout.ABOVE, author.getId());
-
-      *//*  for (int x = 0; x <authors.length; x++) {
-            author = new TextView(context);
-            title = new TextView(context);
-            author.setText(authors[x]);
-            title.setText(titles[x]);
-
-        }*//*
-
-        layout.addView(author);
-        layout.addView(title);
-        return layout;*/
-
     }
 
 }
