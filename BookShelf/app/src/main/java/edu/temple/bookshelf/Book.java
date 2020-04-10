@@ -4,22 +4,24 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Book implements Parcelable {
-    private int id;
+    private int id, duration;
     private String title, author, coverURL;
     public final static String JSON_ID = "book_id";
     public final static String JSON_TITLE = "title";
     public final static String JSON_AUTHOR = "author";
     public final static String JSON_COVER_URL = "cover_url";
+    public final static String JSON_DURATION = "duration";
 
     public Book() {
 
     }
 
-    public Book(int id, String title, String author, String coverURL) {
+    public Book(int id, String title, String author, String coverURL, int duration) {
         this.author = author;
         this.title = title;
         this.id = id;
         this.coverURL = coverURL;
+        this.duration = duration;
     }
 
     protected Book(Parcel in) {
@@ -27,6 +29,7 @@ public class Book implements Parcelable {
         title = in.readString();
         author = in.readString();
         coverURL = in.readString();
+        duration = in.readInt();
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -65,8 +68,16 @@ public class Book implements Parcelable {
         this.coverURL = coverURL;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
     public String toString() {
-        return "ID: " + id + ", Author: " + author + ", Title: " + title + ", Cover_URL: " + coverURL;
+        return "ID: " + id + ", Author: " + author + ", Title: " + title + ", Cover_URL: " + coverURL + ", Duration: " + duration;
     }
 
     @Override
@@ -80,5 +91,6 @@ public class Book implements Parcelable {
         dest.writeString(title);
         dest.writeString(author);
         dest.writeString(coverURL);
+        dest.writeInt(duration);
     }
 }

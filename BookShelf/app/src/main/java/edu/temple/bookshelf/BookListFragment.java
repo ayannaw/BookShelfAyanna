@@ -30,7 +30,7 @@ import java.util.List;
 public class BookListFragment extends Fragment {
 
    ListView listView;
-    private ArrayList<Book> books = new ArrayList<Book>();
+    private ArrayList<Book> books;
     private BookSelectedInterface parentActivity;
     private static final String BOOK_LIST_KEY = "Books";
 
@@ -61,11 +61,10 @@ public class BookListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            books = bundle.getParcelableArrayList(BOOK_LIST_KEY);
-        } else {
-            books = new ArrayList<Book>();
+        //Bundle bundle = getArguments();
+        books = new ArrayList<Book>();
+        if(getArguments() != null) {
+            books.addAll((ArrayList) getArguments().getParcelableArrayList(BOOK_LIST_KEY));
         }
     }
 
@@ -90,10 +89,9 @@ public class BookListFragment extends Fragment {
 
 
     public void UpdateBooks(ArrayList<Book> list) {
-        books.clear();
-        books.addAll(list);
+        this.books.clear();
+        this.books.addAll(list);
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
-
     }
 
     interface BookSelectedInterface {

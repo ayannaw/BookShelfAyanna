@@ -24,6 +24,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static android.media.CamcorderProfile.get;
+
 public class MainActivity extends AppCompatActivity implements BookListFragment.BookSelectedInterface
 {
 
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        manager = getSupportFragmentManager();
 
         searchEditText = findViewById(R.id.searchEditText);
         searchButton = findViewById(R.id.searchButton);
@@ -114,7 +118,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                                     Book aBook = new Book(bookJSON.getInt(Book.JSON_ID),
                                             bookJSON.getString(Book.JSON_TITLE),
                                             bookJSON.getString(Book.JSON_AUTHOR),
-                                            bookJSON.getString(Book.JSON_COVER_URL));
+                                            bookJSON.getString(Book.JSON_COVER_URL),
+                                            bookJSON.getInt(Book.JSON_DURATION));
                                     bookList.add(aBook);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -148,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     @Override
     public void BookSelected(int index) {
         System.out.println(index);
-        Book aBook = bookList.get(index);
+        selectedBook = bookList.get(index);
         if(isTwoContainers) {
             bookDetailsFragment.DisplayBook(selectedBook);
         }
@@ -162,7 +167,12 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(BOOK_LIST_KEY, bookList);
-        outState.putParcelable(SELECTED_BOOK, selectedBook);
+        if (bookList.size() > 0) {
+            outState.putParcelableArrayList(BOOK_LIST_KEY, bookList);
+            if(selectedBook != null) {
+                outState.putParcelable(SELECTED_BOOK, selectedBook);
+            }
+        }
+
     }
 }

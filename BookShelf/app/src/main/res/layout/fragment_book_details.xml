@@ -7,28 +7,53 @@
     tools:context=".BookDetailsFragment"
     android:tag="@string/detailsFragmentTag">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="86dp"
             android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/author"
             android:layout_width="match_parent"
             android:layout_height="61dp"
-            android:textSize="24sp" />
+            android:layout_marginTop="20dp"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
 
         <ImageView
             android:id="@+id/coverImageView"
-            android:layout_width="match_parent"
-            android:layout_height="402dp" />
+            android:layout_width="307dp"
+            android:layout_height="323dp"
+            android:layout_marginStart="153dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="153dp"
+            android:contentDescription="@string/imageContentDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/author" />
 
-    </LinearLayout>
+        <ImageButton
+            android:id="@+id/playImageButton"
+            android:layout_width="64dp"
+            android:layout_height="61dp"
+            android:layout_marginBottom="144dp"
+            android:contentDescription="@string/playButtonContentDescription"
+            android:src="@drawable/play_button_foreground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.904"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </FrameLayout>
