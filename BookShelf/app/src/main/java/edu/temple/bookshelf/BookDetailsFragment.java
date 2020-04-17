@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class BookDetailsFragment extends Fragment {
     private TextView title;
     private TextView author;
     private ImageView cover;
+    private ImageButton playButton;
     private Book book;
     final private static String AUTHOR_KEY = "Authors";
     final private static String TITLE_KEY = "Titles";
@@ -62,6 +64,8 @@ public class BookDetailsFragment extends Fragment {
         author = layout.findViewById(R.id.author);
         title = layout.findViewById(R.id.title);
         cover = layout.findViewById(R.id.coverImageView);
+        playButton = layout.findViewById(R.id.playImageButton);
+
 
         if(book != null) {
             DisplayBook(book);
