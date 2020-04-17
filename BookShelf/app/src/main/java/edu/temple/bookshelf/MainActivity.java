@@ -4,7 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +28,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import edu.temple.audiobookplayer.AudiobookService;
+
 import static android.media.CamcorderProfile.get;
 
 public class MainActivity extends AppCompatActivity implements BookListFragment.BookSelectedInterface
@@ -32,7 +38,21 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
    // Book bookShelf = new Book();
     private Book selectedBook;
     private ArrayList<Book> bookList = new ArrayList<Book>();
+    boolean connected;
+    AudiobookService audiobookService;
+    Intent audioBookIntent;
+    ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            connected = true;
+           // audiobookService =
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            connected = false;
+        }
+    };
     FragmentManager manager;
 
     BookListFragment bookListFragment;
@@ -50,13 +70,17 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     final private static String BOOK_LIST_KEY = "booklist";
     final private static String SELECTED_BOOK = "selectedBook";
     final private static String SEARCH_API = "https://kamorris.com/lab/abp/booksearch.php?search=";
-    final
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         manager = getSupportFragmentManager();
+
+        audioBookIntent = new Intent (MainActivity.this, AudiobookService.class);
+
+        bindService(audioBookIntent, serviceConnection, BIND_AUTO_CREATE);
 
         searchEditText = findViewById(R.id.searchEditText);
         searchButton = findViewById(R.id.searchButton);
