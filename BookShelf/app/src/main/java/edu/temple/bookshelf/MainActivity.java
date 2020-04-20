@@ -39,13 +39,13 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     private Book selectedBook;
     private ArrayList<Book> bookList = new ArrayList<Book>();
     boolean connected;
-    AudiobookService audiobookService;
+    AudiobookService.MediaControlBinder audioBookBinder;
     Intent audioBookIntent;
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            audioBookBinder = (AudiobookService.MediaControlBinder) service;
             connected = true;
-           // audiobookService =
         }
 
         @Override
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
         if(isTwoContainers) {
             if(selectedBook != null) {
-                bookDetailsFragment = bookDetailsFragment.newInstance(selectedBook);
+                bookDetailsFragment = bookDetailsFragment.newInstance(selectedBook, audioBookBinder, connected);
             }
             else {
                 bookDetailsFragment = new BookDetailsFragment();
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         else {
             if(selectedBook != null) {
                 manager.beginTransaction().replace(R.id.container1,
-                        BookDetailsFragment.newInstance(selectedBook)).addToBackStack(null)
+                        BookDetailsFragment.newInstance(selectedBook, audioBookBinder, connected)).addToBackStack(null)
                         .commit();
             }
         }
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             bookDetailsFragment.DisplayBook(selectedBook);
         }
         else {
-            manager.beginTransaction().replace(R.id.container1, BookDetailsFragment.newInstance(selectedBook))
+            manager.beginTransaction().replace(R.id.container1, BookDetailsFragment.newInstance(selectedBook, audioBookBinder, connected))
                     .addToBackStack(null)
                     .commit();
         }

@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +18,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.util.HashMap;
+
+import edu.temple.audiobookplayer.AudiobookService;
 
 
 /**
@@ -29,17 +32,23 @@ public class BookDetailsFragment extends Fragment {
     private ImageView cover;
     private ImageButton playButton;
     private Book book;
+    private boolean serviceConnected;
+    private AudiobookService.MediaControlBinder audioBookBinder;
     final private static String AUTHOR_KEY = "Authors";
     final private static String TITLE_KEY = "Titles";
     final private static String BOOK = "Book";
+    final private static String SERVICE_CONNECTION = "service_connection";
+    final private static String BINDER = "audio_book_binder";
     public BookDetailsFragment() {
         // Required empty public constructor
     }
 
-    public static BookDetailsFragment newInstance(Book book) {
+    public static BookDetailsFragment newInstance(Book book, AudiobookService.MediaControlBinder audioBookBinder, boolean serviceConnection) {
         BookDetailsFragment fragment = new BookDetailsFragment();
         Bundle bundle = new Bundle();
         fragment.setArguments(bundle);
+        bundle.putBoolean(SERVICE_CONNECTION, serviceConnection);
+        bundle.putBinder(BINDER, audioBookBinder);
         bundle.putParcelable(BOOK, book);
         return fragment;
     }
@@ -50,6 +59,8 @@ public class BookDetailsFragment extends Fragment {
         Bundle bundle = getArguments();
         if(bundle != null) {
             book = (Book) bundle.getParcelable(BOOK);
+            audioBookBinder = (AudiobookService.MediaControlBinder) bundle.getBinder(BINDER);
+            serviceConnected = bundle.getBoolean(SERVICE_CONNECTION);
         }
     }
 
@@ -69,7 +80,22 @@ public class BookDetailsFragment extends Fragment {
 
         if(book != null) {
             DisplayBook(book);
+            playButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(serviceConnected) {
+                        if(audioBookBinder.isPlaying()) {
+                            audioBookBinder.pause();
+                        }
+                        else {
+                            audioBookBinder.play(book.getId());
+                        }
+                    }
+                }
+            });
         }
+
+
         return layout;
     }
 
