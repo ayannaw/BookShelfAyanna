@@ -9,13 +9,14 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -32,14 +33,16 @@ import edu.temple.audiobookplayer.AudiobookService;
 
 import static android.media.CamcorderProfile.get;
 
-public class MainActivity extends AppCompatActivity implements BookListFragment.BookSelectedInterface
+public class MainActivity extends AppCompatActivity implements BookListFragment.BookSelectedInterface, BookDetailsFragment.PlayBookInterface
 {
 
    // Book bookShelf = new Book();
     private Book selectedBook;
     private ArrayList<Book> bookList = new ArrayList<Book>();
     boolean connected;
+    AudiobookService audiobookService;
     AudiobookService.MediaControlBinder audioBookBinder;
+    AudiobookService.BookProgress bookProgress;
     Intent audioBookIntent;
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -60,6 +63,10 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
     Button searchButton;
     EditText searchEditText;
+    TextView nowPlayingText;
+    ImageButton pauseButton, stopButton;
+    SeekBar audioBookSeekBar;
+
 
     private String searchString;
     private boolean isTwoContainers;
@@ -84,6 +91,10 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
         searchEditText = findViewById(R.id.searchEditText);
         searchButton = findViewById(R.id.searchButton);
+        nowPlayingText = findViewById(R.id.nowPlayingTextView);
+        pauseButton = findViewById(R.id.pauseImageButton);
+        stopButton = findViewById(R.id.stopImageButton);
+        audioBookSeekBar = findViewById(R.id.progressSeekBar);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,9 +120,10 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
         manager.beginTransaction().replace(R.id.container1, bookListFragment).commit();
 
+
         if(isTwoContainers) {
             if(selectedBook != null) {
-                bookDetailsFragment = bookDetailsFragment.newInstance(selectedBook, audioBookBinder, connected);
+                bookDetailsFragment = bookDetailsFragment.newInstance(selectedBook);
             }
             else {
                 bookDetailsFragment = new BookDetailsFragment();
@@ -122,10 +134,49 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         else {
             if(selectedBook != null) {
                 manager.beginTransaction().replace(R.id.container1,
-                        BookDetailsFragment.newInstance(selectedBook, audioBookBinder, connected)).addToBackStack(null)
+                        BookDetailsFragment.newInstance(selectedBook)).addToBackStack(null)
                         .commit();
             }
         }
+
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (audioBookBinder.isPlaying()) {
+                    audioBookBinder.pause();
+                }
+            }
+        });
+
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(audioBookBinder.isPlaying()) {
+                    audioBookBinder.stop();
+                    nowPlayingText.setText("Now Playing: ");
+                }
+            }
+        });
+
+        audioBookSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if(fromUser) {
+                        audioBookSeekBar.setProgress(progress);
+                        audioBookBinder.seekTo(progress);
+                    }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     private void getBookList(String searchString) {
@@ -182,10 +233,21 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             bookDetailsFragment.DisplayBook(selectedBook);
         }
         else {
-            manager.beginTransaction().replace(R.id.container1, BookDetailsFragment.newInstance(selectedBook, audioBookBinder, connected))
+            manager.beginTransaction().replace(R.id.container1, BookDetailsFragment.newInstance(selectedBook))
                     .addToBackStack(null)
                     .commit();
         }
+    }
+
+    @Override
+    public void playBook(int id, String title) {
+        audioBookBinder.play(id);
+        nowPlayingText.setText(nowPlayingText.getText().toString() + title);
+    }
+
+    @Override
+    public void getCurrentAudioBookDuration(int duration) {
+        audioBookSeekBar.setMax(duration);
     }
 
     @Override

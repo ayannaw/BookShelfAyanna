@@ -1,11 +1,14 @@
 package edu.temple.bookshelf;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,25 +35,33 @@ public class BookDetailsFragment extends Fragment {
     private ImageView cover;
     private ImageButton playButton;
     private Book book;
-    private boolean serviceConnected;
-    private AudiobookService.MediaControlBinder audioBookBinder;
+    private PlayBookInterface parentActivity;
+
     final private static String AUTHOR_KEY = "Authors";
     final private static String TITLE_KEY = "Titles";
     final private static String BOOK = "Book";
-    final private static String SERVICE_CONNECTION = "service_connection";
-    final private static String BINDER = "audio_book_binder";
     public BookDetailsFragment() {
         // Required empty public constructor
     }
 
-    public static BookDetailsFragment newInstance(Book book, AudiobookService.MediaControlBinder audioBookBinder, boolean serviceConnection) {
+    public static BookDetailsFragment newInstance(Book book) {
         BookDetailsFragment fragment = new BookDetailsFragment();
         Bundle bundle = new Bundle();
-        fragment.setArguments(bundle);
-        bundle.putBoolean(SERVICE_CONNECTION, serviceConnection);
-        bundle.putBinder(BINDER, audioBookBinder);
         bundle.putParcelable(BOOK, book);
+        fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if(context instanceof PlayBookInterface) {
+            parentActivity = (PlayBookInterface)context;
+        }
+        else {
+            throw new RuntimeException("Please implement PlayBookInterface interface for program to work");
+        }
     }
 
     @Override
@@ -59,8 +70,6 @@ public class BookDetailsFragment extends Fragment {
         Bundle bundle = getArguments();
         if(bundle != null) {
             book = (Book) bundle.getParcelable(BOOK);
-            audioBookBinder = (AudiobookService.MediaControlBinder) bundle.getBinder(BINDER);
-            serviceConnected = bundle.getBoolean(SERVICE_CONNECTION);
         }
     }
 
@@ -83,22 +92,15 @@ public class BookDetailsFragment extends Fragment {
             playButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(serviceConnected) {
-                        if(audioBookBinder.isPlaying()) {
-                            audioBookBinder.pause();
-                        }
-                        else {
-                            audioBookBinder.play(book.getId());
-                        }
+                        parentActivity.playBook(book.getId(), book.getTitle());
+                        parentActivity.getCurrentAudioBookDuration(book.getDuration());
                     }
-                }
-            });
+                });
         }
 
 
         return layout;
     }
-
 
     public void DisplayBook(Book book) {
         if (layout != null) {
@@ -106,5 +108,10 @@ public class BookDetailsFragment extends Fragment {
             title.setText(book.getTitle());
             Picasso.get().load(book.getCoverURL()).into(cover);
         }
+    }
+
+    interface PlayBookInterface {
+        public void playBook(int id, String bookTitle);
+        public void getCurrentAudioBookDuration(int duration);
     }
 }

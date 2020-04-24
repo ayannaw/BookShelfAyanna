@@ -10,5 +10,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="imageContentDescription">Book Cover</string>
     <string name="playButtonContentDescription">Play Button</string>
+    <string name="nowPlaying">Now Playing: </string>
 
 </resources>
