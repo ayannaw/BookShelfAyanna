@@ -8,7 +8,9 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,9 +42,10 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     private Book selectedBook;
     private ArrayList<Book> bookList = new ArrayList<Book>();
     boolean connected;
-    AudiobookService audiobookService;
     AudiobookService.MediaControlBinder audioBookBinder;
-    AudiobookService.BookProgress bookProgress;
+    private AudiobookService.BookProgress audioBookProgress;
+    private int currentBookId, currentBookProgress;
+    private Handler audioBookHandler;
     Intent audioBookIntent;
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -86,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         manager = getSupportFragmentManager();
 
         audioBookIntent = new Intent (MainActivity.this, AudiobookService.class);
+        audioBookHandler = new Handler();
+        audioBookBinder.setProgressHandler(audioBookHandler);
 
         bindService(audioBookIntent, serviceConnection, BIND_AUTO_CREATE);
 
@@ -144,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             public void onClick(View v) {
                 if (audioBookBinder.isPlaying()) {
                     audioBookBinder.pause();
+                   // currentProgress =
                 }
             }
         });
@@ -161,11 +167,10 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         audioBookSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if(fromUser) {
-                        audioBookSeekBar.setProgress(progress);
-                        audioBookBinder.seekTo(progress);
-                    }
-                    
+                if(fromUser) {
+                    audioBookSeekBar.setProgress(progress);
+                    audioBookBinder.seekTo(progress);
+                }
             }
 
             @Override
@@ -178,6 +183,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
             }
         });
+
+
+
     }
 
     private void getBookList(String searchString) {
@@ -243,7 +251,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     @Override
     public void playBook(int id, String title) {
         audioBookBinder.play(id);
+        currentBookId = id;
         nowPlayingText.setText(nowPlayingText.getText().toString() + title);
+        System.out.println("Audio book playing: " + audioBookBinder.isPlaying());
     }
 
     @Override
@@ -260,6 +270,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 outState.putParcelable(SELECTED_BOOK, selectedBook);
             }
         }
+    }
+
+    private void changeSeekBar() {
 
     }
 }
