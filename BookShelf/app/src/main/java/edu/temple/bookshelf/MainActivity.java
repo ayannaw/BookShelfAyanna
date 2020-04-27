@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                         audioBookSeekBar.setProgress(progress);
                         audioBookBinder.seekTo(progress);
                     }
+                    
             }
 
             @Override
