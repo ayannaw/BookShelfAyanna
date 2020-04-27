@@ -45,7 +45,15 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     AudiobookService.MediaControlBinder audioBookBinder;
     private AudiobookService.BookProgress audioBookProgress;
     private int currentBookId, currentBookProgress;
-    private Handler audioBookHandler;
+    private Handler audioBookHandler = new Handler(){
+    @Override
+    public void handleMessage(@NonNull Message msg) {
+        super.handleMessage(msg);
+        audioBookProgress = (AudiobookService.BookProgress) msg.obj;
+        //update seekBar
+        audioBookSeekBar.setProgress(((AudiobookService.BookProgress) audioBookProgress).getProgress());
+    }
+};;
     Intent audioBookIntent;
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -89,8 +97,11 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         manager = getSupportFragmentManager();
 
         audioBookIntent = new Intent (MainActivity.this, AudiobookService.class);
-        audioBookHandler = new Handler();
-        audioBookBinder.setProgressHandler(audioBookHandler);
+
+        if(audioBookHandler != null) {
+            audioBookBinder.setProgressHandler(audioBookHandler);
+        }
+
 
         bindService(audioBookIntent, serviceConnection, BIND_AUTO_CREATE);
 
@@ -271,8 +282,5 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             }
         }
     }
-
-    private void changeSeekBar() {
-
-    }
 }
+
