@@ -35,25 +35,24 @@ import edu.temple.audiobookplayer.AudiobookService;
 
 import static android.media.CamcorderProfile.get;
 
-public class MainActivity extends AppCompatActivity implements BookListFragment.BookSelectedInterface, BookDetailsFragment.PlayBookInterface
-{
+public class MainActivity extends AppCompatActivity implements BookListFragment.BookSelectedInterface, BookDetailsFragment.PlayBookInterface {
 
-   // Book bookShelf = new Book();
+    // Book bookShelf = new Book();
     private Book selectedBook;
     private ArrayList<Book> bookList = new ArrayList<Book>();
     boolean connected;
     AudiobookService.MediaControlBinder audioBookBinder;
     private AudiobookService.BookProgress audioBookProgress;
     private int currentBookId, currentBookProgress;
-    private Handler audioBookHandler = new Handler(){
-    @Override
-    public void handleMessage(@NonNull Message msg) {
-        super.handleMessage(msg);
-        audioBookProgress = (AudiobookService.BookProgress) msg.obj;
-        //update seekBar
-        audioBookSeekBar.setProgress(((AudiobookService.BookProgress) audioBookProgress).getProgress());
-    }
-};;
+    private Handler audioBookHandler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            audioBookProgress = (AudiobookService.BookProgress) msg.obj;
+            //update seekBar
+            audioBookSeekBar.setProgress(((AudiobookService.BookProgress) audioBookProgress).getProgress());
+        }
+    };
     Intent audioBookIntent;
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -96,11 +95,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
         manager = getSupportFragmentManager();
 
-        audioBookIntent = new Intent (MainActivity.this, AudiobookService.class);
-
-        if(audioBookHandler != null) {
-            audioBookBinder.setProgressHandler(audioBookHandler);
-        }
+        audioBookIntent = new Intent(MainActivity.this, AudiobookService.class);
 
 
         bindService(audioBookIntent, serviceConnection, BIND_AUTO_CREATE);
@@ -120,11 +115,10 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             }
         });
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             bookList = savedInstanceState.getParcelableArrayList(BOOK_LIST_KEY);
             selectedBook = savedInstanceState.getParcelable(SELECTED_BOOK);
-        }
-        else {
+        } else {
             bookList = new ArrayList<Book>();
         }
 
@@ -137,18 +131,16 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         manager.beginTransaction().replace(R.id.container1, bookListFragment).commit();
 
 
-        if(isTwoContainers) {
-            if(selectedBook != null) {
+        if (isTwoContainers) {
+            if (selectedBook != null) {
                 bookDetailsFragment = bookDetailsFragment.newInstance(selectedBook);
-            }
-            else {
+            } else {
                 bookDetailsFragment = new BookDetailsFragment();
             }
 
             manager.beginTransaction().replace(R.id.container2, bookDetailsFragment).commit();
-        }
-        else {
-            if(selectedBook != null) {
+        } else {
+            if (selectedBook != null) {
                 manager.beginTransaction().replace(R.id.container1,
                         BookDetailsFragment.newInstance(selectedBook)).addToBackStack(null)
                         .commit();
@@ -160,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             public void onClick(View v) {
                 if (audioBookBinder.isPlaying()) {
                     audioBookBinder.pause();
-                   // currentProgress =
                 }
             }
         });
@@ -168,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(audioBookBinder.isPlaying()) {
+                if (audioBookBinder.isPlaying()) {
                     audioBookBinder.stop();
                     nowPlayingText.setText("Now Playing: ");
                 }
@@ -178,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         audioBookSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(fromUser) {
+                if (fromUser) {
                     audioBookSeekBar.setProgress(progress);
                     audioBookBinder.seekTo(progress);
                 }
@@ -194,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
             }
         });
-
 
 
     }
@@ -238,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     }
 
     private void updateBooksDisplay() {
-        if(manager.findFragmentById(R.id.container1) instanceof
+        if (manager.findFragmentById(R.id.container1) instanceof
                 BookDetailsFragment) {
             manager.popBackStack();
         }
@@ -249,10 +239,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     public void BookSelected(int index) {
         System.out.println(index);
         selectedBook = bookList.get(index);
-        if(isTwoContainers) {
+        if (isTwoContainers) {
             bookDetailsFragment.DisplayBook(selectedBook);
-        }
-        else {
+        } else {
             manager.beginTransaction().replace(R.id.container1, BookDetailsFragment.newInstance(selectedBook))
                     .addToBackStack(null)
                     .commit();
@@ -262,8 +251,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     @Override
     public void playBook(int id, String title) {
         audioBookBinder.play(id);
-        currentBookId = id;
         nowPlayingText.setText(nowPlayingText.getText().toString() + title);
+        audioBookBinder.setProgressHandler(audioBookHandler);
+        currentBookId = id;
         System.out.println("Audio book playing: " + audioBookBinder.isPlaying());
     }
 
@@ -277,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         super.onSaveInstanceState(outState);
         if (bookList.size() > 0) {
             outState.putParcelableArrayList(BOOK_LIST_KEY, bookList);
-            if(selectedBook != null) {
+            if (selectedBook != null) {
                 outState.putParcelable(SELECTED_BOOK, selectedBook);
             }
         }
