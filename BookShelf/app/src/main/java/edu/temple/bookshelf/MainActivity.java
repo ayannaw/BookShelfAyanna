@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             super.handleMessage(msg);
             audioBookProgress = (AudiobookService.BookProgress) msg.obj;
             //update seekBar
-            audioBookSeekBar.setProgress(((AudiobookService.BookProgress) audioBookProgress).getProgress());
+            if (audioBookProgress != null) {
+                audioBookSeekBar.setProgress(((AudiobookService.BookProgress) audioBookProgress).getProgress());
+            }
         }
     };
     Intent audioBookIntent;
@@ -150,19 +152,15 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (audioBookBinder.isPlaying()) {
-                    audioBookBinder.pause();
-                }
+                audioBookBinder.pause();
             }
         });
 
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (audioBookBinder.isPlaying()) {
-                    audioBookBinder.stop();
-                    nowPlayingText.setText("Now Playing: ");
-                }
+                audioBookBinder.stop();
+                nowPlayingText.setText("Now Playing: ");
             }
         });
 
@@ -270,6 +268,14 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             if (selectedBook != null) {
                 outState.putParcelable(SELECTED_BOOK, selectedBook);
             }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(serviceConnection != null) {
+            unbindService(serviceConnection);
         }
     }
 }

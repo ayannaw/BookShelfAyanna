@@ -32,7 +32,8 @@ public class BookListFragment extends Fragment {
    ListView listView;
     private ArrayList<Book> books;
     private BookSelectedInterface parentActivity;
-    private static final String BOOK_LIST_KEY = "Books";
+    final private static String BOOK_LIST_KEY = "booklist";
+    final private static String SELECTED_BOOK = "selectedBook";
 
     public BookListFragment() {
         // Required empty public constructor
